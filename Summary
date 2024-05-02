@@ -1,0 +1,55 @@
+Jerrad Watts
+
+Understanding morphometrics of cidaroid echinoid spines
+
+	The goal for this project was to take outlines of urchin spines, compare them, and then to properly plot these to help view 
+trends among the spines. These outlines are 2D outlines in a coordinate system created through ImageJ on photographs of spines. 
+These points cover homologous landmarks (4 landmarks) and then semilandmarks of non-homologous regions of the spines. The semilandmark 
+data was then run through the package Morpho, to resample each outline to the same number of points, 250 semilandmarks for a total of 
+254 points). This is where the data was edited to not display my own data; the resampling was done incorrectly so that the personal 
+research was not accessible for theft. This resampled data is what was uploaded to run through the tutorial. After loading in the data, 
+the corrected data sets were put into an array. This array was then run through the package geomorph for analysis. After the 
+Procrustes Analysis is run, to ensure all points are in the same orientation and to account for differences in size, the Principal 
+Component Analysis (PCA) can then be run. The PCA is the analysis that compared the shapes and can be plotted to give a basic 
+understanding of the area the spines plot. The PCA gives a percentage value on each axis to display how much variation can be captured 
+by each axis. There can be quite a large range for this, the closer to 100% the two axes grasp, the more variance is captured by this
+plot. Low percents sometimes require addition axes beyond what is displayed must be plotted to show additional trends in data. The 
+plotted points were extracted and merged with a data set that had details of the spines included, such as species and spine ornamentation
+type. This data was then plotted with ggplot2. Convex hulls were grabbed from the data based on details above and plotted in a scatter 
+plot with convex hulls overlapping. Trends can be shown by what hulls, or certain details, overlap or do not overlap. Hulls covering a 
+wide range of the scatterplot show that an individual genus has variety of spine shapes or in the instance of ornamentation, that certain
+ornaments can be found across many spine shapes. Hulls that overlap very little or are separate display that a genus has a unique shape 
+in spines or that an ornamentation is characteristic to certain spine shapes. Since the beginning of this project, I have gone on to use 
+this on a dataset with 147 specimens in which I have seen these trends and beyond.
+ 
+References & Explanation:
+
+Package geomorph:
+Baken E, Collyer M, Kaliontzopoulou A, Adams D (2021). “geomorph v4.0 and 
+gmShiny: enhanced analytics and a new graphical interface for a comprehensive 
+morphometric experience.” Methods in Ecology and Evolution, 12, 2355-2363.
+
+Code aid:
+Caton, N. R., Pearson, S. G., & Dixson, B. J. (2022). Is facial structure an honest cue to
+ real-world dominance and fighting ability in men? A pre-registered direct 
+replication of. Evolution and Human Behavior, 43(4), 314-324.
+
+Spine ornamentation methods adapted from:
+Kroh, A., & Smith, A. B. (2010). The phylogeny and classification of post-Palaeozoic 
+echinoids. Journal of systematic Palaeontology, 8(2), 147-212.
+
+R program:
+R Core Team. 2024. R: A Language and Environment for Statistical Computing. from 
+https://www.r-project.org/
+
+Code aid:
+Thulman, D. K., Shott, M. J., Slade, A. M., & Williams, J. P.. 2023. Clovis point 
+allometry, modularity, and integration: Exploring shape variation due to tool use with landmark-based geometric morphometrics. Plos one, 18(8), e0289489.
+
+General methods:
+Wan, J., Foster, W. J., Tian, L., Stubbs, T. L., Benton, M. J., Qiu, X., & Yuan, A.. 2021. 
+Decoupling of morphological disparity and taxonomic diversity during the end-Permian mass extinction. Paleobiology, 47(3), 402-417.
+
+Method aid:
+Xue, C., Yuan, D. X., Chen, Y., Stubbs, T. L., Zhao, Y., & Zhang, Z. (2024). 
+Morphological innovation after mass extinction events in Permian and Early Triassic conodonts based on Polygnathacea. Palaeogeography, Palaeoclimatology, Palaeoecology, 112149.
