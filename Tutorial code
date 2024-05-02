@@ -1,1 +1,135 @@
+#R course tutorial on PCA of spines ####
+
+#install packages you do not have
+install.packages("Morpho")
+install.packages("geomorph")
+install.packages("tidyverse")
+install.packages("ggplot2")
+
+#load packages
+library(Morpho)
+library(geomorph)
+library(tidyverse)
+library(ggplot2)
+
+#work done before data upload using package: Morpho
+
+#gonimp_inat1_1rs_p1 <- resampleCurve(gonimp_inat1_1[4:52,], 250, open = TRUE)
+#resampleCurve: resamples along the line created between the points listed and 
+#  up to n = 250 for a total of 254 points counting the 4 landmarks
+
+#repeated with all samples so that each sample had the same number of points
+# and the array can be correctly ran
+
+
+#load files from github ####
+
+#turn into matrix to ensure data is numeric and in the exact same form
+# because gpagen is tempermental
+gonimp_inat1_1_mat <- as.matrix(gonimp_inat1_1)
+gonimp_inat1_2_mat <- as.matrix(gonimp_inat1_2)
+gonimp_inat1_3_mat <- as.matrix(gonimp_inat1_3)
+
+gontub_inat1_1_mat <- as.matrix(gontub_inat1_1)
+gontub_inat2_1_mat <- as.matrix(gontub_inat2_1)
+gontub_inat3_1_mat <- as.matrix(gontub_inat3_1)
+gontub_inat3_2_mat <- as.matrix(gontub_inat3_2)
+gontub_inat3_3_mat <- as.matrix(gontub_inat3_3)
+gontub_inat3_4_mat <- as.matrix(gontub_inat3_4)
+gontub_inat3_5_mat <- as.matrix(gontub_inat3_5)
+
+PhyllaDub_gbif_1_mat <-  as.matrix(PhyllaDub_gb_1)
+phyllaimp_inat4_1_mat <- as.matrix(phyllaimp_inat4_1)
+phyllaimp_inat4_2_mat <- as.matrix(phyllaimp_inat4_2)
+phyllaimp_inat4_3_mat <- as.matrix(phyllaimp_inat4_3)
+phyllaparv_inat1_1_mat <- as.matrix(phyllaparv_inat1_1)
+phyllaparv_inat1_2_mat <- as.matrix(phyllaparv_inat1_2)
+phyllaparv_inat1_3_mat <- as.matrix(phyllaparv_inat1_3)
+
+toh_ed0_r1s1_mat <- as.matrix(toh_ed0_r1_s1)
+toh_ed1_r1s1_mat <- as.matrix(toh_ed1_r1_s1)
+toh_ed1_r2s2_mat <- as.matrix(toh_ed1_r2_s2)
+toh_ed1_r3s3_mat <- as.matrix(toh_ed1_r3_s3)
+toh_ed1_r4s4_mat <- as.matrix(toh_ed1_r4_s4)
+
+#create the array to run through the Procustes Analysis
+gpht_array <- array(data = c(
+                            gonimp_inat1_1_mat,
+                            gonimp_inat1_2_mat,
+                            gonimp_inat1_3_mat,
+                            gontub_inat1_1_mat,
+                            gontub_inat2_1_mat,
+                            gontub_inat3_1_mat,
+                            gontub_inat3_2_mat,
+                            gontub_inat3_3_mat,
+                            gontub_inat3_4_mat,
+                            gontub_inat3_5_mat,
+                            PhyllaDub_gbif_1_mat,
+                            phyllaimp_inat4_1_mat,
+                            phyllaimp_inat4_2_mat,
+                            phyllaimp_inat4_3_mat,
+                            phyllaparv_inat1_1_mat,
+                            phyllaparv_inat1_2_mat,
+                            phyllaparv_inat1_3_mat,
+                            toh_ed0_r1s1_mat,
+                            toh_ed1_r1s1_mat,
+                            toh_ed1_r2s2_mat,
+                            toh_ed1_r3s3_mat, 
+                            toh_ed1_r4s4_mat), dim = c(254, 2, 22)
+)
+
+#gpagen package ####
+
+#run the Procustes analysis to align data and correct for differences in size
+gpht_gpag <- gpagen(gpht_array, PrinAxes = TRUE)
+
+#run the Principal Component Analysis
+gpht_gm <- gm.prcomp(gpht_gpag$coords)
+
+#plot to grab PC values to grab amount of variance for X & Y labels
+plot(gpht_gm)
+
+
+#extract the points to plot into ggplot
+gpht_gm_ex <- data.frame(gpht_gm$x[,1], gpht_gm$x[,2])
+
+#rename columns
+colnames(gpht_gm_ex)
+gpht_gm_ex2 <- gpht_gm_ex |>
+  rename(
+    x = gpht_gm.x...1.,
+    y = gpht_gm.x...2.
+  )
+
+#merge 
+merge_data_hull <- cbind.data.frame(gpht_data_hull, gpht_gm_ex2) 
+
+#ggplot & tidyverse ####
+
+#grab the convex hulls from the data
+#genus
+gpht_gen <- merge_data_hull |> group_by(genus)|>
+  slice(chull(x, y))
+
+
+#ornamentation
+gpht_orn <- merge_data_hull |> group_by(ornamentation)|>
+  slice(chull(x, y))
+
+#plot it all
+#plot genera
+ggplot(
+  merge_data_hull, aes(x, y, color = genus)) +
+  geom_point(shape = 19) +
+  geom_polygon(data = gpht_gen, alpha = 0.2,
+               aes(fill = genus, colour = genus))+ theme_bw() +
+  labs(y = "PC 2: 10.38%", x = "PC 1: 68.25%")
+
+#plot ornamentation
+ggplot(
+  merge_data_hull, aes(x, y, color = ornamentation)) +
+  geom_point(shape = 19) +
+  geom_polygon(data = gpht_orn, alpha = 0.2,
+               aes(fill = ornamentation, colour = ornamentation))+ theme_bw() +
+  labs(y = "PC 2: 10.38%", x = "PC 1: 68.25%")
 
