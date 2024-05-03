@@ -1,16 +1,21 @@
 #R course tutorial on PCA of spines ####
 
+#clear everything
+rm(list = ls())
+
 #install packages you do not have
 install.packages("Morpho")
 install.packages("geomorph")
 install.packages("tidyverse")
 install.packages("ggplot2")
+install.packages("readxl")
 
 #load packages
 library(Morpho)
 library(geomorph)
 library(tidyverse)
 library(ggplot2)
+library(readxl)
 
 #work done before data upload using package: Morpho
 
@@ -21,8 +26,41 @@ library(ggplot2)
 #repeated with all samples so that each sample had the same number of points
 # and the array can be correctly ran
 
+#directory to grab the csvs
+dir.create(tempdir())
 
 #load files from github ####
+PhyllaDub_gb_1 <- read_csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/PhyllaDub_gbif_1.csv')
+
+gonimp_inat1_1 <- read_csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/gonimp_inat1_1.csv')
+gonimp_inat1_2 <- read_csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/gonimp_inat1_2.csv')
+gonimp_inat1_3 <- read_csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/gonimp_inat1_3.csv')
+
+gontub_inat1_1 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/gontub_inat1_1.csv')
+gontub_inat2_1 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/gontub_inat2_1.csv')
+gontub_inat3_1 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/gontub_inat3_1.csv')
+gontub_inat3_2 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/gontub_inat3_2.csv')
+gontub_inat3_3 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/gontub_inat3_3.csv')
+gontub_inat3_4 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/gontub_inat3_4.csv')
+gontub_inat3_5 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/gontub_inat3_5.csv')
+
+phyllaimp_inat4_1 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/phyllaimp_inat4_1.csv')
+phyllaimp_inat4_2 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/phyllaimp_inat4_2.csv')
+phyllaimp_inat4_3 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/phyllaimp_inat4_3.csv')
+
+phyllaparv_inat1_1 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/phyllaparv_inat1_1.csv')
+phyllaparv_inat1_2 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/phyllaparv_inat1_2.csv')
+phyllaparv_inat1_3 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/phyllaparv_inat1_3.csv')
+
+toh_ed0_r1s1 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/toh_ed0_r1s1.csv')
+toh_ed1_r1s1 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/toh_ed1_r1s1.csv')
+toh_ed1_r2s2 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/toh_ed1_r2s2.csv')
+toh_ed1_r3s3 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/toh_ed1_r3s3.csv')
+toh_ed1_r4s4 <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/toh_ed1_r4s4.csv')
+
+
+gpht_data_hull <- read.csv('https://raw.githubusercontent.com/Watt5/Bio-R/main/gpht_data_hull.csv')
+
 
 #turn into matrix to ensure data is numeric and in the exact same form
 # because gpagen is tempermental
@@ -46,11 +84,11 @@ phyllaparv_inat1_1_mat <- as.matrix(phyllaparv_inat1_1)
 phyllaparv_inat1_2_mat <- as.matrix(phyllaparv_inat1_2)
 phyllaparv_inat1_3_mat <- as.matrix(phyllaparv_inat1_3)
 
-toh_ed0_r1s1_mat <- as.matrix(toh_ed0_r1_s1)
-toh_ed1_r1s1_mat <- as.matrix(toh_ed1_r1_s1)
-toh_ed1_r2s2_mat <- as.matrix(toh_ed1_r2_s2)
-toh_ed1_r3s3_mat <- as.matrix(toh_ed1_r3_s3)
-toh_ed1_r4s4_mat <- as.matrix(toh_ed1_r4_s4)
+toh_ed0_r1s1_mat <- as.matrix(toh_ed0_r1s1)
+toh_ed1_r1s1_mat <- as.matrix(toh_ed1_r1s1)
+toh_ed1_r2s2_mat <- as.matrix(toh_ed1_r2s2)
+toh_ed1_r3s3_mat <- as.matrix(toh_ed1_r3s3)
+toh_ed1_r4s4_mat <- as.matrix(toh_ed1_r4s4)
 
 #create the array to run through the Procustes Analysis
 gpht_array <- array(data = c(
@@ -132,4 +170,3 @@ ggplot(
   geom_polygon(data = gpht_orn, alpha = 0.2,
                aes(fill = ornamentation, colour = ornamentation))+ theme_bw() +
   labs(y = "PC 2: 10.38%", x = "PC 1: 68.25%")
-
